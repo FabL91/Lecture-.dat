@@ -25,6 +25,7 @@ class MainWindow(QMainWindow):
         self.colonne2.stateChanged.connect(self.update_plot)
         self.colonne3.stateChanged.connect(self.update_plot)
         self.colonne4.stateChanged.connect(self.update_plot)
+        self.colonne5.stateChanged.connect(self.update_plot)
 
 
     def open_file(self):
@@ -84,6 +85,14 @@ class MainWindow(QMainWindow):
                     else:
                         x_data = self.data[:,3]
                         xlabel = "Colonne 4"
+                        
+                if self.colonne5.isChecked():
+                    if x_data is not None:
+                        y_data = self.data[:,4]
+                        ylabel = "Colonne 5"
+                    else:
+                        x_data = self.data[:,4]
+                        xlabel = "Colonne 5"
 
 
 

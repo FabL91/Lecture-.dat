@@ -56,6 +56,13 @@
          </property>
         </widget>
        </item>
+        <item>
+        <widget class="QCheckBox" name="colonne5">
+         <property name="text">
+          <string>Colonne 5</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
