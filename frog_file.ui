@@ -24,42 +24,42 @@
        <item>
         <widget class="QPushButton" name="openButton">
          <property name="text">
-          <string>Open .dat file</string>
+          <string>Open Ek.dat file</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="colonne1">
          <property name="text">
-          <string>Data X</string>
+          <string>temps(fs)</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="colonne2">
          <property name="text">
-          <string>Colonne 2</string>
+          <string>Intensité</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="colonne3">
          <property name="text">
-          <string>Colonne 3</string>
+          <string>Phase(rad)</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="colonne4">
          <property name="text">
-          <string>Colonne 4</string>
+          <string>Partie reel(E(t))</string>
          </property>
         </widget>
        </item>
         <item>
         <widget class="QCheckBox" name="colonne5">
          <property name="text">
-          <string>Colonne 5</string>
+          <string>Partie Img(E(t))</string>
          </property>
         </widget>
        </item>

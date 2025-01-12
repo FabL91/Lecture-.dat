@@ -55,20 +55,18 @@ class MainWindow(QMainWindow):
 
                 x_data = None
                 y_data = None
-                xlabel = ""
                 ylabel = ""
 
                 if self.colonne1.isChecked():
                     x_data = self.data[:,0]
-                    xlabel = "Colonne 1"
-
+                    
                 if self.colonne2.isChecked():
                     if x_data is not None:
                         y_data = self.data[:,1]
                         ylabel = "Colonne 2"
                     else:
                         x_data = self.data[:,1]
-                        xlabel = "Colonne 2"
+                        
 
                 if self.colonne3.isChecked():
                     if x_data is not None:
@@ -76,7 +74,7 @@ class MainWindow(QMainWindow):
                         ylabel = "Colonne 3"
                     else:
                         x_data = self.data[:,2]
-                        xlabel = "Colonne 3"
+                        
 
                 if self.colonne4.isChecked():
                     if x_data is not None:
@@ -84,7 +82,7 @@ class MainWindow(QMainWindow):
                         ylabel = "Colonne 4"
                     else:
                         x_data = self.data[:,3]
-                        xlabel = "Colonne 4"
+                        
                         
                 if self.colonne5.isChecked():
                     if x_data is not None:
@@ -92,7 +90,7 @@ class MainWindow(QMainWindow):
                         ylabel = "Colonne 5"
                     else:
                         x_data = self.data[:,4]
-                        xlabel = "Colonne 5"
+                        
 
 
 
@@ -101,7 +99,7 @@ class MainWindow(QMainWindow):
                     return
 
                 ax.plot(x_data, y_data, marker='o', linestyle='-')
-                ax.set_xlabel(xlabel)
+                ax.set_xlabel("Time (fs)")
                 ax.set_ylabel(ylabel)
                 ax.set_title(f"Data from file {self.filename}")
                 self.canvas.draw()
