@@ -1,20 +1,27 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QFileDialog, QMessageBox
+from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QFileDialog, QMessageBox, QSizePolicy
 from PyQt6.uic import loadUi
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.figure import Figure
 import numpy as np
 import pandas as pd  # Import pandas for Excel saving
+
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         loadUi("frog_file.ui", self)
         
-        # Create figure and axes once
-        self.figure, (self.ax1, self.ax2) = plt.subplots(2, 1, sharex=True, figsize=(10, 8))
-        self.figure.subplots_adjust(hspace=0.3)
+        # Create a Figure instance
+        self.figure = Figure()
+        
+        # Create two subplots
+        self.ax1 = self.figure.add_subplot(211)
+        self.ax2 = self.figure.add_subplot(212)
+        # Create canvas
         self.canvas = FigureCanvas(self.figure)
         self.toolbar = NavigationToolbar(self.canvas, self)
 
@@ -23,6 +30,14 @@ class MainWindow(QMainWindow):
             self.mplWidget.setLayout(layout)
         self.mplWidget.layout().addWidget(self.toolbar)
         self.mplWidget.layout().addWidget(self.canvas)
+
+        # Set the canvas to expand both horizontally and vertically
+        self.canvas.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
+        self.canvas.updateGeometry()
+
+        # Connect the resize event of mplWidget to update the figure
+        self.mplWidget.resizeEvent = self.on_mpl_resize
 
         self.openButton.clicked.connect(self.open_file)
         self.saveButton.clicked.connect(self.save_data)
@@ -34,6 +49,11 @@ class MainWindow(QMainWindow):
         self.filename = None  
         self.x_data = None
         self.y_data = None
+        
+    def on_mpl_resize(self, event):
+        # This method will be called when mplWidget is resized
+        self.figure.tight_layout()
+        self.canvas.draw()    
 
     def open_file(self):
         filename, _ = QFileDialog.getOpenFileName(self, "Open Ek.dat file", "", "Data files (*.dat)")
