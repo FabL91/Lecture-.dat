@@ -46,9 +46,14 @@ class MainWindow(QMainWindow):
 
 
     def update_plot(self):
-        self.figure.clear()
-        ax = self.figure.add_subplot(111)
-        ax.grid(True)
+        
+        self.figure.clear()  # Clear the existing plot
+        # Create a 2x1 grid of subplots
+        fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(8, 6))  # Adjust figsize as needed
+        fig.subplots_adjust(hspace=0.3) #adjust spacing between subplots
+        ax1.grid(True)
+        ax2.grid(True)
+        self.canvas.figure = fig # important! set new figure to canvas
 
         if self.filename:
             try:
@@ -77,19 +82,29 @@ class MainWindow(QMainWindow):
                     
                     if len(selected_cols) > 2: #more than 2 columns selected. use 1st 2.
                         print("Warning: More than 2 columns selected. Only using the first two.")
+                
+
+                    self.x_data = x_data #store for saving
+                    self.y_data = y_data #store for saving
+
+
+                    ax1.plot(x_data, y_data, marker='o', linestyle='-')
+                    ax1.set_xlabel("Time (fs)")
+                    ax1.set_ylabel("Intensity") #generic label for better practice.
+                    ax1.set_title(f"Data from file {self.filename}")
+                    
+                    #Example of adding a second plot (replace with your desired plot)
+                    ax2.plot(x_data, x_data**2, 'r-', label='x^2') #plot something on ax2
+                    ax2.set_xlabel("Time (fs)")
+                    ax2.set_ylabel("x^2")
+                    ax2.legend()
+                
+                
+                    self.canvas.draw()
+                
                 elif len(selected_cols) < 2:
                     QMessageBox.critical(self, "Error", "Please select at least two columns.")
                     return
-
-                self.x_data = x_data #store for saving
-                self.y_data = y_data #store for saving
-
-
-                ax.plot(x_data, y_data, marker='o', linestyle='-')
-                ax.set_xlabel("Time (fs)")
-                ax.set_ylabel("Intensity") #generic label for better practice.
-                ax.set_title(f"Data from file {self.filename}")
-                self.canvas.draw()
 
             except IndexError:
                 QMessageBox.critical(self, "Error", "Not enough columns in data.")
