@@ -39,6 +39,7 @@ class MainWindow(QMainWindow):
         # Connect the resize event of mplWidget to update the figure
         self.mplWidget.resizeEvent = self.on_mpl_resize
 
+        self.openSpeckButton.clicked.connect(self.open_file_spectre)
         self.openButton.clicked.connect(self.open_file)
         self.saveButton.clicked.connect(self.save_data)
         self.colonne1.stateChanged.connect(self.update_plot)
@@ -62,6 +63,18 @@ class MainWindow(QMainWindow):
             try:
                 self.data = np.loadtxt(filename)
                 self.update_plot()
+            except FileNotFoundError:
+                QMessageBox.critical(self, "Error", f"File '{filename}' not found.")
+            except ValueError:
+                QMessageBox.critical(self, "Error", f"File '{filename}' contains invalid data. Make sure it's in numerical format with spaces or tabs as separators.")
+                
+    def open_file_spectre(self):
+        filename, _ = QFileDialog.getOpenFileName(self, "Open Speck.dat file", "", "Data files (*.dat)")
+        if filename:
+            self.filename = filename
+            try:
+                self.data = np.loadtxt(filename)
+                self.update_plot_spectre()
             except FileNotFoundError:
                 QMessageBox.critical(self, "Error", f"File '{filename}' not found.")
             except ValueError:
@@ -117,6 +130,64 @@ class MainWindow(QMainWindow):
                     self.ax2.plot(x_data, x_data**2, 'r-', label='x^2') #plot something on ax2
                     self.ax2.set_xlabel("Time (fs)")
                     self.ax2.set_ylabel("x^2")
+                    self.ax2.legend()
+                
+                
+                    self.canvas.draw()
+                
+                elif len(selected_cols) < 2:
+                    QMessageBox.critical(self, "Error", "Please select at least two columns.")
+                    return
+
+            except IndexError:
+                QMessageBox.critical(self, "Error", "Not enough columns in data.")
+                
+                
+    def update_plot_spectre(self):
+        
+        
+        if self.filename:
+            try:
+                num_cols = self.data.shape[1]
+                if num_cols < 2:  # Minimum 2 columns needed for plotting
+                    QMessageBox.critical(self, "Error", "Data file must have at least two columns.")
+                    return
+
+                x_data = None
+                y_data = None
+
+                #Simplified column selection logic:
+                checked_columns = [
+                    self.colonne1.isChecked(),
+                    self.colonne2.isChecked(),
+                    self.colonne3.isChecked(),
+                    self.colonne4.isChecked(),
+                    self.colonne5.isChecked()
+                ]
+                
+                selected_cols = np.where(np.array(checked_columns))[0]
+
+                if len(selected_cols) >= 2:
+                    x_data = self.data[:, selected_cols[0]]
+                    y_data = self.data[:, selected_cols[1]]
+                    
+                    if len(selected_cols) > 2: #more than 2 columns selected. use 1st 2.
+                        print("Warning: More than 2 columns selected. Only using the first two.")
+                
+
+                    self.x_data = x_data #store for saving
+                    self.y_data = y_data #store for saving
+                    
+                    # Clear previous plots
+                    self.ax2.clear()
+
+                    
+                    
+                    #Example of adding a second plot (replace with your desired plot)
+                    self.ax2.plot(x_data, y_data, 'r-', label='Spectre') #plot something on ax2
+                    self.ax2.set_xlabel("Longueur d'onde (nm)")
+                    self.ax2.set_ylabel("Intensity")
+                    self.ax2.set_title(f"Data from file {self.filename}")
                     self.ax2.legend()
                 
                 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>664</width>
+    <height>452</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -74,12 +74,41 @@
      </widget>
     </item>
     <item>
+     <widget class="QGroupBox" name="spectreGroupBox">
+      <property name="title">
+       <string>Spectre</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QPushButton" name="openSpeckButton">
+         <property name="text">
+          <string>Open Speck.dat file</string>
+         </property>
+        </widget>
+       </item>
+       <!-- Ajoutez ici les widgets pour le spectre si nécessaire -->
+      </layout>
+     </widget>
+    </item>
+    <item>
      <widget class="QWidget" name="mplWidget" native="true">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LayoutDirection::RightToLeft</enum>
       </property>
      </widget>
     </item>
@@ -90,7 +119,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>664</width>
      <height>22</height>
     </rect>
    </property>
