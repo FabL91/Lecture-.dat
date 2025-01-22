@@ -11,7 +11,10 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         loadUi("frog_file.ui", self)
-        self.figure = plt.figure()
+        
+        # Create figure and axes once
+        self.figure, (self.ax1, self.ax2) = plt.subplots(2, 1, sharex=True, figsize=(10, 8))
+        self.figure.subplots_adjust(hspace=0.3)
         self.canvas = FigureCanvas(self.figure)
         self.toolbar = NavigationToolbar(self.canvas, self)
 
@@ -22,13 +25,13 @@ class MainWindow(QMainWindow):
         self.mplWidget.layout().addWidget(self.canvas)
 
         self.openButton.clicked.connect(self.open_file)
-        self.saveButton.clicked.connect(self.save_data) # Connect save button
+        self.saveButton.clicked.connect(self.save_data)
         self.colonne1.stateChanged.connect(self.update_plot)
         self.colonne2.stateChanged.connect(self.update_plot)
         self.colonne3.stateChanged.connect(self.update_plot)
         self.colonne4.stateChanged.connect(self.update_plot)
         self.colonne5.stateChanged.connect(self.update_plot)
-        self.filename = None  # Initialize filename
+        self.filename = None  
         self.x_data = None
         self.y_data = None
 
@@ -47,14 +50,7 @@ class MainWindow(QMainWindow):
 
     def update_plot(self):
         
-        self.figure.clear()  # Clear the existing plot
-        # Create a 2x1 grid of subplots
-        fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(8, 6))  # Adjust figsize as needed
-        fig.subplots_adjust(hspace=0.3) #adjust spacing between subplots
-        ax1.grid(True)
-        ax2.grid(True)
-        self.canvas.figure = fig # important! set new figure to canvas
-
+        
         if self.filename:
             try:
                 num_cols = self.data.shape[1]
@@ -86,18 +82,22 @@ class MainWindow(QMainWindow):
 
                     self.x_data = x_data #store for saving
                     self.y_data = y_data #store for saving
+                    
+                    # Clear previous plots
+                    self.ax1.clear()
+                    self.ax2.clear()
 
 
-                    ax1.plot(x_data, y_data, marker='o', linestyle='-')
-                    ax1.set_xlabel("Time (fs)")
-                    ax1.set_ylabel("Intensity") #generic label for better practice.
-                    ax1.set_title(f"Data from file {self.filename}")
+                    self.ax1.plot(x_data, y_data, marker='o', linestyle='-')
+                    self.ax1.set_xlabel("Time (fs)")
+                    self.ax1.set_ylabel("Intensity") #generic label for better practice.
+                    self.ax1.set_title(f"Data from file {self.filename}")
                     
                     #Example of adding a second plot (replace with your desired plot)
-                    ax2.plot(x_data, x_data**2, 'r-', label='x^2') #plot something on ax2
-                    ax2.set_xlabel("Time (fs)")
-                    ax2.set_ylabel("x^2")
-                    ax2.legend()
+                    self.ax2.plot(x_data, x_data**2, 'r-', label='x^2') #plot something on ax2
+                    self.ax2.set_xlabel("Time (fs)")
+                    self.ax2.set_ylabel("x^2")
+                    self.ax2.legend()
                 
                 
                     self.canvas.draw()
