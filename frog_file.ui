@@ -78,7 +78,7 @@
       <property name="title">
        <string>Spectre</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QHBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QPushButton" name="openSpeckButton">
          <property name="text">
@@ -86,7 +86,13 @@
          </property>
         </widget>
        </item>
-       <!-- Ajoutez ici les widgets pour le spectre si nécessaire -->
+       <item>
+        <widget class="QPushButton" name="saveSpeckButton">
+         <property name="text">
+          <string>Save Spectre.xls</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>

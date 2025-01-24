@@ -118,7 +118,7 @@ class MainWindow(QMainWindow):
                     
                     # Clear previous plots
                     self.ax1.clear()
-                    self.ax2.clear()
+                    
 
 
                     self.ax1.plot(x_data, y_data, marker='o', linestyle='-')
@@ -126,12 +126,7 @@ class MainWindow(QMainWindow):
                     self.ax1.set_ylabel("Intensity") #generic label for better practice.
                     self.ax1.set_title(f"Data from file {self.filename}")
                     
-                    #Example of adding a second plot (replace with your desired plot)
-                    self.ax2.plot(x_data, x_data**2, 'r-', label='x^2') #plot something on ax2
-                    self.ax2.set_xlabel("Time (fs)")
-                    self.ax2.set_ylabel("x^2")
-                    self.ax2.legend()
-                
+                              
                 
                     self.canvas.draw()
                 
