@@ -54,6 +54,13 @@ class MainWindow(QMainWindow):
         self.intensiteSpectrale.stateChanged.connect(self.update_plot_spectre)
         self.phaseSpectrale.stateChanged.connect(self.update_plot_spectre)
         self.saveSpeckButton.clicked.connect(self.save_data_spectre)
+
+        # Set checkboxes to checked by default
+        self.colonne1.setChecked(True)
+        self.colonne2.setChecked(True)
+        
+        self.longueurOnde.setChecked(True)
+        self.intensiteSpectrale.setChecked(True)
         
         
     def on_mpl_resize(self, event):
