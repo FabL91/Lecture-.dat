@@ -93,6 +93,27 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="longueurOnde">
+         <property name="text">
+          <string>longueur d'onde</string>
+      </property>
+     </widget>
+    </item>
+       <item>
+        <widget class="QCheckBox" name="intensiteSpectrale">
+         <property name="text">
+          <string>intensité spectrale</string>
+   </property>
+  </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="phaseSpectrale">
+         <property name="text">
+          <string>Phase Spectrale(rad)</string>
+         </property>
+ </widget>
+       </item>
       </layout>
      </widget>
     </item>

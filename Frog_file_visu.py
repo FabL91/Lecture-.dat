@@ -50,6 +50,11 @@ class MainWindow(QMainWindow):
         self.filename = None  
         self.x_data = None
         self.y_data = None
+        self.longueurOnde.stateChanged.connect(self.update_plot_spectre)
+        self.intensiteSpectrale.stateChanged.connect(self.update_plot_spectre)
+        self.phaseSpectrale.stateChanged.connect(self.update_plot_spectre)
+        self.saveSpeckButton.clicked.connect(self.save_data_spectre)
+        
         
     def on_mpl_resize(self, event):
         # This method will be called when mplWidget is resized
@@ -73,7 +78,7 @@ class MainWindow(QMainWindow):
         if filename:
             self.filename = filename
             try:
-                self.data = np.loadtxt(filename)
+                self.data_spectre = np.loadtxt(filename)
                 self.update_plot_spectre()
             except FileNotFoundError:
                 QMessageBox.critical(self, "Error", f"File '{filename}' not found.")
@@ -143,35 +148,33 @@ class MainWindow(QMainWindow):
         
         if self.filename:
             try:
-                num_cols = self.data.shape[1]
+                num_cols = self.data_spectre.shape[1]
                 if num_cols < 2:  # Minimum 2 columns needed for plotting
                     QMessageBox.critical(self, "Error", "Data file must have at least two columns.")
                     return
 
-                x_data = None
-                y_data = None
+                x_data_spectre = None
+                y_data_spectre = None
 
                 #Simplified column selection logic:
                 checked_columns = [
-                    self.colonne1.isChecked(),
-                    self.colonne2.isChecked(),
-                    self.colonne3.isChecked(),
-                    self.colonne4.isChecked(),
-                    self.colonne5.isChecked()
-                ]
+                    self.longueurOnde.isChecked(),
+                    self.intensiteSpectrale.isChecked(),
+                    self.phaseSpectrale.isChecked()
+                    ]
                 
                 selected_cols = np.where(np.array(checked_columns))[0]
 
                 if len(selected_cols) >= 2:
-                    x_data = self.data[:, selected_cols[0]]
-                    y_data = self.data[:, selected_cols[1]]
+                    x_data_spectre = self.data_spectre[:, selected_cols[0]]
+                    y_data_spectre = self.data_spectre[:, selected_cols[1]]
                     
                     if len(selected_cols) > 2: #more than 2 columns selected. use 1st 2.
                         print("Warning: More than 2 columns selected. Only using the first two.")
                 
 
-                    self.x_data = x_data #store for saving
-                    self.y_data = y_data #store for saving
+                    self.x_data_spectre = x_data_spectre #store for saving
+                    self.y_data_spectre = y_data_spectre #store for saving
                     
                     # Clear previous plots
                     self.ax2.clear()
@@ -179,7 +182,7 @@ class MainWindow(QMainWindow):
                     
                     
                     #Example of adding a second plot (replace with your desired plot)
-                    self.ax2.plot(x_data, y_data, 'r-', label='Spectre') #plot something on ax2
+                    self.ax2.plot(x_data_spectre, y_data_spectre, 'r-', label='Spectre') #plot something on ax2
                     self.ax2.set_xlabel("Longueur d'onde (nm)")
                     self.ax2.set_ylabel("Intensity")
                     self.ax2.set_title(f"Data from file {self.filename}")
@@ -202,7 +205,20 @@ class MainWindow(QMainWindow):
                 try:
                     df = pd.DataFrame({'x_data': self.x_data, 'y_data': self.y_data})
                     df.to_excel(filename, index=False)
-                    QMessageBox.information(self, "Success", f"Data saved to {filename}")
+                    QMessageBox.information(self, "Success", f"Les données du champs E(t) reconstruit sont sauvegardées à {filename}")
+                except Exception as e:
+                    QMessageBox.critical(self, "Error", f"An error occurred while saving: {e}")
+        else:
+            QMessageBox.warning(self, "Warning", "No data to save. Please open a file and select columns.")
+            
+    def save_data_spectre(self):
+        if self.x_data_spectre is not None and self.y_data_spectre is not None:
+            filename, _ = QFileDialog.getSaveFileName(self, "Save Data", "", "Excel files (*.xlsx)")
+            if filename:
+                try:
+                    df = pd.DataFrame({'x_data': self.x_data_spectre, 'y_data': self.y_data_spectre})
+                    df.to_excel(filename, index=False)
+                    QMessageBox.information(self, "Success", f"Les données du spectres reconstruit sont sauvegardées à{filename}")
                 except Exception as e:
                     QMessageBox.critical(self, "Error", f"An error occurred while saving: {e}")
         else:
