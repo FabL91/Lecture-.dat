@@ -154,7 +154,7 @@ class MainWindow(QMainWindow):
                     self.ax2.plot(x_data_spectre, y_data_spectre, 'r-', label='Spectre')
                     self.ax2.set_xlabel("Longueur d'onde (nm)")
                     self.ax2.set_ylabel("Intensity")
-                    self.ax2.set_title(f"Data from file {self.filename}")
+                    self.ax2.set_title("Data from file ")
                     self.ax2.legend()
                     self.canvas.draw()
                 elif len(selected_cols) < 2:
